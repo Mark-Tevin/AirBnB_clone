@@ -246,3 +246,19 @@ e952b772-80a5-41e9-b728-6bc4dc5c21b4
 2
 (hbnb)
 ```
+
+## Authors
+<details>
+    <summary>Ayoub Esqalli</summary>
+    <ul>
+    <li><a href="https://www.github.com/ay-sql">Github</a></li>
+    <li><a href="mailto:ayoubesqalli@gmail.com">e-mail</a></li>
+    </ul>
+</details>
+<details>
+    <summary>Tevin Mark</summary>
+    <ul>
+    <li><a href="https://github.com/Mark-Tevin">Github</a></li>
+    <li><a href="mailto:tevinsmark@gmail.com">e-mail</a></li>
+    </ul>
+</details>
