@@ -40,7 +40,6 @@ if __name__ == "__main__":
     my_model_json = my_model.to_dict()
     print(my_model_json)
     print("JSON of my_model:")
-    for key, value in my_model_json.items()
-    print("\t{}: ({}) - {}".format(
-        key, type(value), value
-        ))
+    for key in my_model_json.keys():
+        print("\t{}: ({}) - {}".format(
+            key, type(my_model_json[key]), my_model_json[key]))
