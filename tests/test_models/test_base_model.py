@@ -12,6 +12,7 @@ import unittest
 from datetime import datetime
 from models.base_model import BaseModel
 
+
 class TestBaseModel(unittest.TestCase):
     def test_init(self):
         my_model = BaseModel()
@@ -30,13 +31,13 @@ class TestBaseModel(unittest.TestCase):
 
     def test_to_dict(self):
         my_model = BaseModel()
-        my_model_dict = my_model.to_dict()
+        rdict = my_model.to_dict()
 
-        self.assertIsInstance(my_model_dict, dict)
-        self.assertEqual(my_model_dict['__class__'], 'BaseModel')
-        self.assertEqual(my_model_dict['id'], my_model.id)
-        self.assertEqual(my_model_dict['created_at'], my_model.created_at.isoformat())
-        self.assertEqual(my_model_dict['updated_at'], my_model.updated_at.isoformat())
+        self.assertIsInstance(rdict, dict)
+        self.assertEqual(rdict['__class__'], 'BaseModel')
+        self.assertEqual(rdict['id'], my_model.id)
+        self.assertEqual(rdict['created_at'], my_model.created_at.isoformat())
+        self.assertEqual(rdict['updated_at'], my_model.updated_at.isoformat())
 
     def test_str(self):
         my_model = BaseModel()
