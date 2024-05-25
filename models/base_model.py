@@ -35,7 +35,7 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
-        """Returns string representation"""
+        """Returns official string representation"""
 
         return "[{}] ({}) {}".\
             format(type(self).__name__, self.id, self.__dict__)
@@ -49,8 +49,8 @@ class BaseModel:
     def to_dict(self):
         """returns a dictionary containing all keys/values of __dict__"""
 
-        rdict = self.__dict__.copy()
-        rdict["__class__"] = type(self).__name__
-        rdict["created_at"] = my_dict["created_at"].isoformat()
-        rdict["updated_at"] = my_dict["updated_at"].isoformat()
-        return rdict
+        my_dict = self.__dict__.copy()
+        my_dict["__class__"] = type(self).__name__
+        my_dict["created_at"] = my_dict["created_at"].isoformat()
+        my_dict["updated_at"] = my_dict["updated_at"].isoformat()
+        return my_dict
