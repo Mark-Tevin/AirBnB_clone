@@ -4,7 +4,7 @@ FileStorage module
 """
 
 import json
-import os
+import os.path
 from models.base_model import BaseModel
 
 
