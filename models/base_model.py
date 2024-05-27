@@ -1,66 +1,59 @@
-#!/sr/bin/python3
+#!/usr/bin/python3
 """
-uuid module in python it is used for the creation of unique id.
-date and time module in python it helps us work with time.
+BaseModel module
 """
-from datetime import datetime
-from uuid import uuid4
-import models
+
+import uuid
+from datetime import datetime, timezone
 
 
 class BaseModel:
-    """Base model class, this is the super class
-    where every other class would inherit from
-
-    Attributes
-        id: it's a public instance attribute uuid4 string
-        created_at: it's a public instance attribute, datetime
-        updated_at: it's a public instance attribute, datetime
-
-    Methods
-        save: we use it to keep track of any
-            change made to the instance BaseModel
-        to_dict: we use it to convert the data
-        of each instance into a dictionary
-        (first step of serialization/deserialization)
     """
-    TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+    A base class for other models
+    """
 
-    def __init__(self, *args, **kwargs):
-        """Initialize a new instance of BaseModel.
-        Args:
-            - *args: its not used
-            - **kwargs: i's a dictionary of key-values arguments
+    def __init__(self) -> None:
         """
-        if kwargs:
-            for k, v in kwargs.items():
-                if k == '__class__':
-                    continue
-                if k in ['created_at', 'updated_at'] and\
-                        isinstance(v, str):
-                    v = datetime.strptime(v, self.TIME_FORMAT)
-                setattr(self, k, v)
+        Initializes a new instance of BaseModel
+        """
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now(timezone.utc)
+        self.updated_at = datetime.now(timezone.utc)
 
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
-            models.storage.new(self)
+    def save(self) -> None:
+        """
+        Updates the updated_at attribute with current time
+        """
+        self.updated_at = datetime.now(timezone.utc)
 
-    def __str__(self):
-        """returns the string representation of instance"""
-        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+    def to_dict(self) -> dict:
+        """
+        Converts the instance to a dictionary
+        """
+        inst_dict = self.__dict__.copy()
+        inst_dict["__class__"] = self.__class__.__name__
+        inst_dict["created_at"] = self.created_at.isoformat()
+        inst_dict["updated_at"] = self.updated_at.isoformat()
+        return inst_dict
 
-    def save(self):
-        """helps save every created instance"""
-        self.updated_at = datetime.now()
-        models.storage.save()
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the instance
+        """
+        class_name = self.__class__.__name__
+        return "[{}] ({}) {}".format(class_name, self.id, self.__dict__)
 
-    def to_dict(self):
-        """helps convert object to dictionary"""
-        obj_dict = self.__dict__.copy()
-        obj_dict['__class__'] = self.__class__.__name__
-        for k, v in obj_dict.items():
-            if isinstance(v, datetime):
-                obj_dict[k] = v.isoformat()
-        return obj_dict
+
+if __name__ == "__main__":
+    my_model.name = "My First Model"
+    my_model.my_number = 89
+    print(my_model)
+    my_model.save()
+    print(my_model)
+    my_model_json = my_model.to_dict()
+    print(my_model_json)
+    print("JSON of my_model:")
+    for key in my_model_json.keys():
+        print("\t{}: ({}) - {}".format(
+            key, type(my_model_json[key]), my_model_json[key])
+        )
