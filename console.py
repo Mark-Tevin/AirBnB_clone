@@ -4,7 +4,6 @@ Module for the entry point of the command interpreter.
 """
 
 import cmd
-import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -40,6 +39,12 @@ class HBNBCommand(cmd.Cmd):
         """
         print()
         return True
+
+    def emptyline(self):
+        """
+        Overrides the default behavior to do nothing on an empty line.
+        """
+        pass
 
 
 if __name__ == "__main__":
