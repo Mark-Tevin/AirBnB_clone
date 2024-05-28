@@ -66,11 +66,11 @@ class TestFileStorage(unittest.TestCase):
 
         # Check if reloaded objects are the same as original objects
         self.assertIsNotNone(
-                new_storage.all().get("BaseModel.{}".format(obj1.id))
-                )
+            new_storage.all().get("BaseModel.{}".format(obj1.id))
+        )
         self.assertIsNotNone(
-                new_storage.all().get("BaseModel.{}".format(obj2.id))
-                )
+            new_storage.all().get("BaseModel.{}".format(obj2.id))
+        )
 
     def test_save_to_file(self):
         """Tests saving objects to a file and checks if it's created."""
