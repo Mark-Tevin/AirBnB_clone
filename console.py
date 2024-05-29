@@ -4,7 +4,7 @@ Module for the entry point of the command interpreter.
 """
 
 import cmd
-import shlex
+from shlex import split
 from models.base_model import BaseModel
 from models import storage
 
