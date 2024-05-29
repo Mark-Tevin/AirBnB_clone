@@ -19,6 +19,10 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     valid_classes = ["BaseModel"]
 
+    def emptyline(self):
+        """Does Nothing upon receiving an empty line."""
+        pass
+
     def do_quit(self, arg):
         """
         Quit command to exit the program.
@@ -26,6 +30,17 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg (str): The command argument.
         """
+        return True
+
+    def help_quit(self):
+        """
+        Prints the help documentation for the quit command.
+        """
+        print("Quit command to exit the program")
+
+    def do_EOF(self, arg):
+        """EOF signal to exit the program"""
+        print()
         return True
 
     def do_create(self, arg):
@@ -143,28 +158,6 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 setattr(obj, attr_name, attr_value)
                 obj.save()
-
-    def help_quit(self):
-        """
-        Prints the help documentation for the quit command.
-        """
-        print("Quit command to exit the program")
-
-    def do_EOF(self, arg):
-        """
-        Handles End Of File character to exit the program.
-
-        Args:
-            arg (str): The command argument.
-        """
-        print()
-        return True
-
-    def emptyline(self):
-        """
-        Overrides the default behavior to do nothing on an empty line.
-        """
-        pass
 
 
 if __name__ == "__main__":
