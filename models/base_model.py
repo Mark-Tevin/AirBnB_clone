@@ -12,27 +12,31 @@ class BaseModel:
     """
     A base class for other models
     """
-    TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
     def __init__(self, *args, **kwargs):
         """
         Initializes a new instance of BaseModel
+
         Args:
             - *args: Not used here
-            - **kwargs: dictionary of key-values arguments
+            - **kwargs: dictionary of key-value arguments
         """
+        time_format = "%Y-%m-%dT%H:%M:%S.%f"
+
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
         if kwargs:
             for k, v in kwargs.items():
                 if k == '__class__':
                     continue
-                if k in ['created_at', 'updated_at'] and isinstance(v, str):
-                    v = datetime.strptime(v, self.TIME_FORMAT)
-                setattr(self, k, v)
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
-            models.storage.new(self)
+                elif k in ("created_at", "updated_at"):
+                    setattr(self, k, datetime.strptime(v, time_format))
+                else:
+                    setattr(self, k, v)
+
+        models.storage.new(self)
 
     def save(self) -> None:
         """
