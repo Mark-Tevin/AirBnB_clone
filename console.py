@@ -16,6 +16,7 @@ class HBNBCommand(cmd.Cmd):
     Args:
         cmd (cmd.Cmd): The base class for building command line interfaces.
     """
+
     prompt = "(hbnb) "
     valid_classes = ["BaseModel"]
 
@@ -39,7 +40,9 @@ class HBNBCommand(cmd.Cmd):
         print("Quit command to exit the program")
 
     def do_EOF(self, arg):
-        """EOF signal to exit the program"""
+        """
+        EOF signal to exit the program
+        """
         print()
         return True
 
