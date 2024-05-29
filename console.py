@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
     valid_classes = ["BaseModel"]
 
     def emptyline(self):
-        """Does Nothing upon receiving an empty line."""
+        """Does nothing upon receiving an empty line."""
         pass
 
     def do_quit(self, arg):
@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """
-        EOF signal to exit the program
+        EOF signal to exit the program.
         """
         print()
         return True
@@ -114,18 +114,18 @@ class HBNBCommand(cmd.Cmd):
 
         Usage: all [class_name]
         """
-        objects = storage.all()
         commands = shlex.split(arg)
+        objects = storage.all()
 
         if len(commands) == 0:
-            for key, value in objects.items():
-                print(str(value))
+            for obj in objects.values():
+                print(str(obj))
         elif commands[0] not in self.valid_classes:
             print("** class doesn't exist **")
         else:
-            for key, value in objects.items():
+            for key, obj in objects.items():
                 if key.split('.')[0] == commands[0]:
-                    print(str(value))
+                    print(str(obj))
 
     def do_update(self, arg):
         """
@@ -141,23 +141,25 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(commands) < 2:
             print("** instance id missing **")
+        elif len(commands) < 3:
+            print("** attribute name missing **")
+        elif len(commands) < 4:
+            print("** value missing **")
         else:
             objects = storage.all()
             key = "{}.{}".format(commands[0], commands[1])
             if key not in objects:
                 print("** no instance found **")
-            elif len(commands) < 3:
-                print("** attribute name missing **")
-            elif len(commands) < 4:
-                print("** value missing **")
             else:
                 obj = objects[key]
                 attr_name = commands[2]
                 attr_value = commands[3]
 
                 try:
-                    attr_value = eval(attr_value)
-                except Exception:
+                    # Try to convert attribute value to its actual type
+                    attr_value = eval(attr_value, {"__builtins__": {}})
+                except (NameError, SyntaxError):
+                    # Handle cases where eval fails
                     pass
                 setattr(obj, attr_name, attr_value)
                 obj.save()
