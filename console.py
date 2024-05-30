@@ -18,8 +18,8 @@ class HBNBCommand(cmd.Cmd):
         cmd (cmd.Cmd): The base class for building command line interfaces.
     """
 
-    prompt = "(hbnb) "
-    valid_classes = ["BaseModel"]
+    prompt = "(hbnb)"
+    valid_classes = ["BaseModel", "User"]
 
     def emptyline(self):
         """Does nothing upon receiving an empty line."""
