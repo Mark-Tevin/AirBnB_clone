@@ -5,9 +5,14 @@ Module for the entry point of the command interpreter.
 
 import cmd
 import shlex
+from models.amenity import Amenity
 from models.base_model import BaseModel
-from models import storage
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.user import User
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -18,8 +23,11 @@ class HBNBCommand(cmd.Cmd):
         cmd (cmd.Cmd): The base class for building command line interfaces.
     """
 
-    prompt = "(hbnb)"
-    valid_classes = ["BaseModel", "User"]
+    prompt = "(hbnb) "
+    valid_classes = [
+        "BaseModel", "User", "Amenity",
+        "Place", "Review", "State", "City"
+    ]
 
     def emptyline(self):
         """Does nothing upon receiving an empty line."""
@@ -41,9 +49,7 @@ class HBNBCommand(cmd.Cmd):
         print("Quit command to exit the program")
 
     def do_EOF(self, arg):
-        """
-        EOF signal to exit the program.
-        """
+        """EOF signal to exit the program"""
         print()
         return True
 
@@ -115,18 +121,41 @@ class HBNBCommand(cmd.Cmd):
 
         Usage: all [class_name]
         """
-        commands = shlex.split(arg)
         objects = storage.all()
+        commands = shlex.split(arg)
 
         if len(commands) == 0:
-            for obj in objects.values():
-                print(str(obj))
+            for key, value in objects.items():
+                print(str(value))
         elif commands[0] not in self.valid_classes:
             print("** class doesn't exist **")
         else:
-            for key, obj in objects.items():
+            for key, value in objects.items():
                 if key.split('.')[0] == commands[0]:
-                    print(str(obj))
+                    print(str(value))
+
+    def default(self, arg):
+        """Default behavior of the cmd for invalid syntax."""
+        arg_list = arg.split('.')
+        incoming_class = arg_list[0]
+
+        command = arg_list[1].split('(')
+        incoming_method = command[0]
+
+        method_dict = {
+            'all': self.do_all,
+            'show': self.do_show,
+            'destroy': self.do_destroy,
+            'update': self.do_update
+        }
+
+        if incoming_method in method_dict:
+            return method_dict[incoming_method](
+                "{} {}".format(incoming_class, '')
+            )
+
+        print("*** Unknown syntax: {}".format(arg))
+        return False
 
     def do_update(self, arg):
         """
@@ -142,25 +171,23 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(commands) < 2:
             print("** instance id missing **")
-        elif len(commands) < 3:
-            print("** attribute name missing **")
-        elif len(commands) < 4:
-            print("** value missing **")
         else:
             objects = storage.all()
             key = "{}.{}".format(commands[0], commands[1])
             if key not in objects:
                 print("** no instance found **")
+            elif len(commands) < 3:
+                print("** attribute name missing **")
+            elif len(commands) < 4:
+                print("** value missing **")
             else:
                 obj = objects[key]
                 attr_name = commands[2]
                 attr_value = commands[3]
 
                 try:
-                    # Try to convert attribute value to its actual type
-                    attr_value = eval(attr_value, {"__builtins__": {}})
-                except (NameError, SyntaxError):
-                    # Handle cases where eval fails
+                    attr_value = eval(attr_value)
+                except Exception:
                     pass
                 setattr(obj, attr_name, attr_value)
                 obj.save()
