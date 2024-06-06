@@ -139,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
 
         Usage:
             <class_name>.<method><("Id", "attr_name", "attr_value")>
-            User.update("9318325-ed84-4a81-4a01-alca-b25e56887f12", "age", "150")
+            User.update("9318325-ed84-4a81-4a01-alca-b25e56887f1")
             User.show
         """
         arg_list = arg.split('.')
@@ -149,9 +149,8 @@ class HBNBCommand(cmd.Cmd):
         incoming_method = command[0]
 
         incoming_xtra_arg = command[1].split(')')[0]
-        
         all_args = incoming_xtra_arg.split(',')
-        
+
         method_dict = {
             'all': self.do_all,
             'show': self.do_show,
@@ -169,7 +168,7 @@ class HBNBCommand(cmd.Cmd):
                 attribute_name = all_args[1]
                 attribute_value = all_args[2]
                 return method_dict[incoming_method](
-                    "{} {} {} {}".format(incoming_class, 
+                    "{} {} {} {}".format(incoming_class,
                                          obj_id,
                                          attribute_name,
                                          attribute_value))
