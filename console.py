@@ -135,7 +135,13 @@ class HBNBCommand(cmd.Cmd):
                     print(str(value))
 
     def default(self, arg):
-        """Default behavior of the cmd for invalid syntax."""
+        """Default behavior of the cmd for invalid syntax.
+
+        Usage:
+            <class_name>.<method><("Id", "attr_name", "attr_value")>
+            User.update("9318325-ed84-4a81-4a01-alca-b25e56887f12", "age", "150")
+            User.show
+        """
         arg_list = arg.split('.')
         incoming_class = arg_list[0]
 
@@ -143,7 +149,9 @@ class HBNBCommand(cmd.Cmd):
         incoming_method = command[0]
 
         incoming_xtra_arg = command[1].split(')')[0]
-
+        
+        all_args = incoming_xtra_arg.split(',')
+        
         method_dict = {
             'all': self.do_all,
             'show': self.do_show,
@@ -153,8 +161,18 @@ class HBNBCommand(cmd.Cmd):
         }
 
         if incoming_method in method_dict.keys():
-            return method_dict[incoming_method](
-                "{} {}".format(incoming_class, incoming_xtra_arg))
+            if incoming_method != "update":
+                return method_dict[incoming_method](
+                    "{} {}".format(incoming_class, incoming_xtra_arg))
+            else:
+                obj_id = all_args[0]
+                attribute_name = all_args[1]
+                attribute_value = all_args[2]
+                return method_dict[incoming_method](
+                    "{} {} {} {}".format(incoming_class, 
+                                         obj_id,
+                                         attribute_name,
+                                         attribute_value))
 
         print("*** Unknown syntax: {}".format(arg))
         return False
